@@ -1,0 +1,25 @@
+on:
+  push:
+    branches:
+      - master
+
+env:
+  NODE_VERSION: '12.x'                # set this to the node version to use
+
+jobs:
+  build-and-deploy:
+    name: Run e2e tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: npm install, build, and test
+      run: |
+        # Build and test the project, then
+        # deploy to Azure Web App.
+        npm install
+        npm run build
+        npm run e2e -- --protractor-config=./e2e/protractor-ci.conf.js
